@@ -23,3 +23,6 @@ if __name__ == '__main__':
 
     if 'Not open source' == '{{ cookiecutter.open_source_license }}':
         remove_file('LICENSE')
+
+    if 'GitHub' == '{{ cookiecutter.gitlab_or_github }}':
+        remove_file('.gitlab-ci.yml')

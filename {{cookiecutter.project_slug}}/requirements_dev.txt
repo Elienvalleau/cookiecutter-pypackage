@@ -12,3 +12,5 @@ click==6.7{% endif %}
 {% if cookiecutter.use_pytest == 'y' -%}
 pytest==3.4.2
 pytest-runner==2.11.1{% endif %}
+mypy==0.630
+pyre-check==0.0.14

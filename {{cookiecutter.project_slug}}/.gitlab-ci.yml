@@ -1,0 +1,89 @@
+stages:
+    - test
+    - coverage
+    - analysis
+    - report
+    - docs
+    - docker_gcloud
+
+test:
+    stage: test
+    image: kennethreitz/pipenv
+    script:
+        - apt-get update -qq
+        - pipenv install
+        - pipenv run tox
+
+coverage:
+    stage: coverage
+    image: kennethreitz/pipenv
+    artifacts:
+        untracked: true
+    dependencies:
+        - test
+    script:
+        - apt-get update -qq
+        - pipenv install
+        - pipenv run make coverage
+    only:
+        - master
+
+analysis:
+    stage: analysis
+    image: ciricihq/gitlab-sonar-scanner
+    artifacts:
+        untracked: true
+    dependencies:
+        - coverage
+    variables:
+        SONAR_URL: http://sonar.hubstairs.com
+        SONAR_ANALYSIS_MODE: issues
+        SONAR_GITLAB_PROJECT_ID: CI_COMMIT_REF_NAME
+    script:
+        - gitlab-sonar-scanner
+    only:
+        - master
+
+
+report:
+    stage: report
+    image: ciricihq/gitlab-sonar-scanner
+    dependencies:
+        - analysis
+    variables:
+        SONAR_URL: http://sonar.hubstairs.com
+        SONAR_ANALYSIS_MODE: publish
+        SONAR_GITLAB_PROJECT_ID: CI_COMMIT_REF_NAME
+    script:
+        - gitlab-sonar-scanner
+    only:
+        - master
+
+
+
+#docs:
+#    stage: docs
+#    image: kennethreitz/pipenv
+#    script:
+#        - apt-get update -qq
+#        - pipenv install
+#        - pipenv run make install
+#        - pipenv run make docs
+#    artifacts:
+#        untracked: true
+#    only:
+#        - master
+#
+#
+#docker_gcloud:
+#    stage: docker_gcloud
+#    image: google/cloud-sdk:latest
+#    services:
+#        - docker:dind
+#    dependencies:
+#        - docs
+#    script:
+#        - gcloud auth activate-service-account --key-file=docs/devops-ed1d893f700c.json
+#        - cd docs && gcloud app deploy . --project devops-209522 -q
+#    only:
+#        - master

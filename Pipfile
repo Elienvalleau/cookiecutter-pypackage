@@ -1,0 +1,26 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+tox = "==2.9.1"
+cryptography = "==1.7"
+cookiecutter = ">=1.4.0"
+pytest-cookies = "==0.2.0"
+watchdog = "==0.8.3"
+alabaster = "==0.7.8"
+PyYAML = "==3.11"
+bumpversion = "==0.5.3"
+wheel = "==0.30.0"
+coverage = "==4.5.1"
+Sphinx = "==1.7.1"
+twine = "==1.10.0"
+click = "==6.7"
+pytest = "==3.4.2"
+pytest-runner = "==2.11.1"
+mypy = "==0.630"
+pyre-check = "==0.0.14"
+
+[requires]
+python_version = "3.6"

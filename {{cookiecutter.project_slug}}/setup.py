@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """The setup script."""
-
+import os
+import re
 from setuptools import setup, find_packages
 
 with open('README.rst') as readme_file:
@@ -11,7 +12,20 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [{%- if cookiecutter.command_line_interface|lower == 'click' %}'Click>=6.0',{%- endif %} ]
+wordList = []
+with open(os.path.join(os.path.dirname(__file__), 'Pipfile')) as f:
+    li = list(f)
+    start = li.index('[dev-packages]\n')+1
+    end = li.index('[requires]\n')-1
+
+    for item in li[start:end]:
+        i = re.sub(' = ', '', item)
+        i = re.sub('"', '', i)
+        i = re.sub('\*', '', i)
+        i = re.sub(r'"(.*)"', r'\1', i)
+        wordList.append(i[:-1])
+requirements = wordList
+# requirements = [{%- if cookiecutter.command_line_interface|lower == 'click' %}'Click>=6.0',{%- endif %} ]
 
 setup_requirements = [{%- if cookiecutter.use_pytest == 'y' %}'pytest-runner',{%- endif %} ]
 
