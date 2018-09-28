@@ -77,7 +77,12 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}',
+{%- if cookiecutter.gitlab_or_github == "GitHub" %}
+    url='https://github.com/{{ cookiecutter.git_hub_or_lab_username }}/{{ cookiecutter.project_slug }}',
+{%- endif %}
+{%- if cookiecutter.gitlab_or_github == "Gitlab" %}
+    url='https://gitlab.com/{{ cookiecutter.git_hub_or_lab_username }}/{{ cookiecutter.project_slug }}',
+{%- endif %}
     version='{{ cookiecutter.version }}',
     zip_safe=False,
 )
