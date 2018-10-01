@@ -1,18 +1,34 @@
 # -*- coding: utf-8 -*-
 
 """Console script for {{cookiecutter.project_slug}}."""
-import sys
+{%- if cookiecutter.command_line_interface == 'click' %}
 import click
+{%- elif cookiecutter.command_line_interface == 'Argparse' %}
+import argparse
+{%- else %}
+import sys
+{%- endif %}
+{%- if cookiecutter.command_line_interface == 'Click' %}
 
 
 @click.command()
+@click.argument('names', nargs=-1)
+def main(names):
+    click.echo(repr(names))
+{%- elif cookiecutter.command_line_interface == 'Argparse' %}
+
+parser = argparse.ArgumentParser(description='Command description.')
+parser.add_argument('names', metavar='NAME', nargs=argparse.ZERO_OR_MORE,
+                    help="A name of something.")
+
+
 def main(args=None):
-    """Console script for {{cookiecutter.project_slug}}."""
-    click.echo("Replace this message by putting your code into "
-               "{{cookiecutter.project_slug}}.cli.main")
-    click.echo("See click documentation at http://click.pocoo.org/")
+    args = parser.parse_args(args=args)
+    print(args.names)
+{%- else %}
+
+
+def main(argv=sys.argv):
+    print(argv)
     return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())  # pragma: no cover
+{%- endif %}
