@@ -26,3 +26,4 @@ if __name__ == '__main__':
 
     if 'GitHub' == '{{ cookiecutter.gitlab_or_github }}':
         remove_file('.gitlab-ci.yml')
+        remove_file('sonar-project.properties')
