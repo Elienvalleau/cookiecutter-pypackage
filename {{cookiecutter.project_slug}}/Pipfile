@@ -3,6 +3,7 @@ url = "https://pypi.python.org/simple"
 verify_ssl = true
 
 [dev-packages]
+PyYAML = "==3.11"
 bumpversion = "==0.5.3"
 wheel = "==0.30.0"
 watchdog = "==0.8.3"

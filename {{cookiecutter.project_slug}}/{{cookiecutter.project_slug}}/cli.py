@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Console script for {{cookiecutter.project_slug}}."""
-{%- if cookiecutter.command_line_interface == 'click' %}
+{%- if cookiecutter.command_line_interface == 'Click' %}
 import click
 {%- elif cookiecutter.command_line_interface == 'Argparse' %}
 import argparse

@@ -1,30 +1,23 @@
 stages:
     - test
-    - coverage
     - analysis
     - report
+    - docs
+    # - docker_gcloud
 
 test:
     stage: test
     image: kennethreitz/pipenv
-    script:
-        - apt-get update -qq
-        - pipenv install --dev
-        - pipenv run tox
-
-coverage:
-    stage: coverage
-    image: kennethreitz/pipenv
     artifacts:
         untracked: true
-    dependencies:
-        - test
     script:
         - apt-get update -qq
+        - apt-get install -y python3-dev
         - pipenv install --dev
+        - pipenv install
+        - pipenv run make install
+        - pipenv run make test
         - pipenv run make coverage
-    only:
-        - master
 
 analysis:
     stage: analysis
@@ -32,7 +25,7 @@ analysis:
     artifacts:
         untracked: true
     dependencies:
-        - coverage
+        - test
     variables:
         SONAR_URL: http://sonar.hubstairs.com
         SONAR_ANALYSIS_MODE: issues
@@ -56,3 +49,31 @@ report:
         - gitlab-sonar-scanner
     only:
         - master
+
+
+
+#docs:
+#    stage: docs
+#    image: kennethreitz/pipenv
+#    script:
+#        - apt-get update -qq
+#        - pipenv install
+#        - pipenv run make install
+#        - pipenv run make docs
+#    artifacts:
+#        untracked: true
+#    only:
+#        - master
+#
+#
+#docker_gcloud:
+#    stage: docker_gcloud
+#    image: google/cloud-sdk:latest
+#    services:
+#        - docker:dind
+#    dependencies:
+#        - docs script:
+#        - gcloud auth activate-service-account --key-file=docs/devops-ed1d893f700c.json
+#        - cd docs && gcloud app deploy . --project devops-209522 -q
+#    only:
+#        - master
